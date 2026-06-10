@@ -1,4 +1,4 @@
-function renderContent(data){
+function renderContent(data) {
 
     const container = document.getElementById("content");
 
@@ -31,7 +31,7 @@ function renderContent(data){
     bindSearch();
 }
 
-function bindAccordions(){
+function bindAccordions() {
 
     const accordions = document.querySelectorAll(".accordion");
 
@@ -39,36 +39,67 @@ function bindAccordions(){
 
         btn.addEventListener("click", () => {
 
-            document.querySelectorAll(".panel").forEach(panel => {
-                if(panel !== btn.nextElementSibling){
-                    panel.classList.remove("show");
+            const panel = btn.nextElementSibling;
+
+            document.querySelectorAll(".panel").forEach(item => {
+
+                if (item !== panel) {
+                    item.classList.remove("show");
                 }
+
             });
 
-            btn.nextElementSibling.classList.toggle("show");
+            panel.classList.toggle("show");
+
         });
 
     });
+
 }
 
-function bindSearch(){
+function bindSearch() {
 
     const search = document.getElementById("searchInput");
 
-    search.addEventListener("keyup", () => {
+    search.addEventListener("input", () => {
 
-        const value = search.value.toLowerCase();
+        const value = search.value.toLowerCase().trim();
 
-        document.querySelectorAll(".accordion").forEach(item => {
+        document.querySelectorAll(".category").forEach(category => {
 
-            const text = item.textContent.toLowerCase();
+            let hasVisibleItems = false;
 
-            item.style.display =
-                text.includes(value)
-                ? "block"
-                : "none";
+            const accordions = category.querySelectorAll(".accordion");
+
+            accordions.forEach(accordion => {
+
+                const panel = accordion.nextElementSibling;
+
+                const question = accordion.textContent.toLowerCase();
+                const answer = panel.textContent.toLowerCase();
+
+                const match =
+                    question.includes(value) ||
+                    answer.includes(value);
+
+                accordion.style.display =
+                    match ? "block" : "none";
+
+                if (!match) {
+                    panel.classList.remove("show");
+                }
+
+                if (match) {
+                    hasVisibleItems = true;
+                }
+
+            });
+
+            category.style.display =
+                hasVisibleItems ? "block" : "none";
 
         });
 
     });
+
 }
