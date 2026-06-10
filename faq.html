@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EviNDT FAQs</title>
+    <title>FAQs</title>
+
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -11,70 +12,30 @@
 <div class="container">
 
     <div class="nav">
-        <a href="faq.html" class="nav-btn active">FAQs</a>
-        <a href="objections.html" class="nav-btn">Objections</a>
+        <a href="index.html">Home</a>
+        <a href="faq.html" class="active">FAQs</a>
+        <a href="objections.html">Objections</a>
     </div>
 
-    <h1>EviNDT FAQs</h1>
+    <h1>FAQs</h1>
 
-    <div class="category">
-        <h2>General Questions</h2>
+    <input
+        type="text"
+        id="searchInput"
+        placeholder="Search FAQs..."
+        class="search-box"
+    >
 
-        <button class="accordion">What is EviNDT?</button>
-        <div class="panel">
-            <p>
-                EviNDT is a reporting solution designed to simplify inspection reporting,
-                organize photos automatically, and generate professional reports faster.
-            </p>
-        </div>
-
-        <button class="accordion">How does EviNDT work?</button>
-        <div class="panel">
-            <p>
-                Inspectors upload inspection photos and data into EviNDT. The system
-                automatically organizes the information and generates reports.
-            </p>
-        </div>
-
-        <button class="accordion">Who is EviNDT for?</button>
-        <div class="panel">
-            <p>
-                EviNDT is suitable for NDT companies, inspection service providers,
-                surveyors, and any business that produces inspection reports.
-            </p>
-        </div>
-    </div>
-
-    <div class="category">
-        <h2>Implementation</h2>
-
-        <button class="accordion">Is training provided?</button>
-        <div class="panel">
-            <p>
-                Yes. We provide onboarding assistance and guidance to ensure a smooth
-                implementation process.
-            </p>
-        </div>
-
-        <button class="accordion">How long does setup take?</button>
-        <div class="panel">
-            <p>
-                Setup duration depends on the complexity of your reporting templates
-                and workflow requirements.
-            </p>
-        </div>
-
-        <button class="accordion">Can we use our existing templates?</button>
-        <div class="panel">
-            <p>
-                Yes. Existing report templates can be replicated and customized within
-                EviNDT.
-            </p>
-        </div>
-    </div>
+    <div id="content"></div>
 
 </div>
 
+<script src="js/faq-data.js"></script>
 <script src="js/script.js"></script>
+
+<script>
+renderContent(faqData);
+</script>
+
 </body>
 </html>
