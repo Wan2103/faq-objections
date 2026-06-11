@@ -14,7 +14,7 @@
 
     <h1>📄 Template Builder</h1>
 
-    <!-- MODE SECTION -->
+    <!-- TEMPLATE MODE -->
     <div class="form-section">
         <h2>Template Mode</h2>
 
@@ -36,7 +36,7 @@
         </div>
     </div>
 
-    <!-- STRUCTURE SECTION -->
+    <!-- REPORT STRUCTURE -->
     <div class="form-section">
         <h2>Report Structure Filter</h2>
 
@@ -63,8 +63,52 @@
         </div>
 
         <div class="button-group">
-            <button id="useTemplateBtn">Use Template</button>
+            <button id="useTemplateBtn" class="btn-primary">Use Template</button>
         </div>
+    </div>
+
+    <!-- 📊 SALES / INSPECTION CRM FORM -->
+    <div class="form-section">
+        <h2>📊 Inspection / Sales Record</h2>
+
+        <label>Prospect / Company</label>
+        <input type="text" placeholder="Enter company name or prospect">
+
+        <label>User Role</label>
+        <input type="text" placeholder="e.g. QA Engineer, Inspector, Manager">
+
+        <label>Report Type</label>
+        <select>
+            <option>UT Report</option>
+            <option>RT Report</option>
+            <option>MT Report</option>
+            <option>PT Report</option>
+            <option>Visual Inspection</option>
+        </select>
+
+        <label>Current Reporting Tool</label>
+        <input type="text" placeholder="e.g. Excel, Word, Manual paper">
+
+        <label>Main Pain</label>
+        <textarea placeholder="What is the main issue they face?"></textarea>
+
+        <label>Template Available?</label>
+        <select>
+            <option>Yes</option>
+            <option>No</option>
+        </select>
+
+        <label>Demo Result</label>
+        <textarea placeholder="What happened during demo?"></textarea>
+
+        <label>Objections</label>
+        <textarea placeholder="List objections raised"></textarea>
+
+        <label>Next Action</label>
+        <input type="text" placeholder="e.g. Follow-up demo, send quote">
+
+        <label>Follow-up Date</label>
+        <input type="date">
     </div>
 
     <!-- ACTIONS -->
