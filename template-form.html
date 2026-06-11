@@ -1,162 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Template Collection Form</title>
-
-    <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>EviNDT - Template Builder</title>
+    <link rel="stylesheet" href="css/style.css"/>
 </head>
+
 <body>
 
 <div class="container">
 
-    <div class="nav">
-        <a href="index.html">Home</a>
-        <a href="faq.html">FAQs</a>
-        <a href="objections.html">Objections</a>
-        <a href="demo-script.html">Demo Script</a>
-        <a href="template-form.html" class="active">Template Form</a>
+    <div class="card">
+        <h2>📄 Template Builder</h2>
+        <p>Upload, generate, or select inspection report templates.</p>
     </div>
 
-    <h1>Template Collection Form</h1>
+    <!-- REPORT STRUCTURE -->
+    <div class="card">
+        <h2>📌 Report Structure</h2>
 
-    <form id="templateForm">
+        <div class="checkbox-group">
+            <label><input type="checkbox" class="structure" value="header"> Header</label>
+            <label><input type="checkbox" class="structure" value="client"> Client Info</label>
+            <label><input type="checkbox" class="structure" value="inspection"> Inspection</label>
+            <label><input type="checkbox" class="structure" value="photos"> Photos</label>
+            <label><input type="checkbox" class="structure" value="findings"> Findings</label>
+            <label><input type="checkbox" class="structure" value="recommendations"> Recommendations</label>
+            <label><input type="checkbox" class="structure" value="signoff"> Sign-off</label>
+        </div>
+    </div>
 
-        <div class="form-section">
+    <!-- MODE -->
+    <div class="card">
+        <h2>📁 Template Mode</h2>
 
-            <h2>Company Information</h2>
+        <label>Do you already have a template?</label>
+        <select id="hasTemplate">
+            <option value="yes">Yes - Upload my template</option>
+            <option value="no">No - Use system templates</option>
+        </select>
 
-            <input type="text" id="companyName" placeholder="Company Name">
-
-            <input type="text" id="contactPerson" placeholder="Contact Person">
-
-            <input type="text" id="position" placeholder="Position">
-
-            <input type="email" id="email" placeholder="Email">
-
-            <input type="text" id="phone" placeholder="Phone Number">
-
+        <!-- UPLOAD SECTION -->
+        <div id="uploadSection">
+            <label>Upload Template (PDF / DOCX only)</label>
+            <input type="file" id="templateFile" accept=".pdf,.docx"/>
         </div>
 
-        <div class="form-section">
+        <!-- GENERATE SECTION -->
+        <div id="generateSection" class="hidden">
+            <label>Generate Template Name</label>
+            <input type="text" id="templateName" placeholder="e.g. UT Report Template"/>
+            <button class="btn-secondary" id="generateBtn">Generate Template</button>
+        </div>
+    </div>
 
-            <h2>Report Information</h2>
+    <!-- TEMPLATE LIBRARY -->
+    <div class="card hidden" id="libraryCard">
+        <h2>📚 Template Library</h2>
 
-            <input type="text" id="reportName" placeholder="Report Name">
+        <p>Select a template to preview:</p>
 
-            <select id="reportType">
-                <option>NDT</option>
-                <option>Drone Inspection</option>
-                <option>Infrastructure</option>
-                <option>Asset Integrity</option>
-                <option>Factory Maintenance</option>
-                <option>Other</option>
-            </select>
+        <select id="templateList"></select>
 
-            <label>
-                Existing Template Available?
-            </label>
-
-            <select id="existingTemplate">
-                <option>Yes</option>
-                <option>No</option>
-            </select>
-
-            <input type="file" id="templateFile">
-
+        <div class="preview-box" id="templatePreview">
+            Preview will appear here...
         </div>
 
-        <div class="form-section">
+        <button class="btn-primary" id="useTemplateBtn">Use This Template</button>
+    </div>
 
-            <h2>Report Structure</h2>
+    <!-- ACTIONS -->
+    <div class="card">
+        <h2>⚡ Actions</h2>
 
-            <div class="checkbox-grid">
-
-                <label><input type="checkbox" value="Cover Page"> Cover Page</label>
-                <label><input type="checkbox" value="Table of Contents"> Table of Contents</label>
-                <label><input type="checkbox" value="Executive Summary"> Executive Summary</label>
-                <label><input type="checkbox" value="Inspection Details"> Inspection Details</label>
-                <label><input type="checkbox" value="Findings Section"> Findings Section</label>
-                <label><input type="checkbox" value="Photo Section"> Photo Section</label>
-                <label><input type="checkbox" value="Recommendations"> Recommendations</label>
-                <label><input type="checkbox" value="Conclusion"> Conclusion</label>
-                <label><input type="checkbox" value="Signature Section"> Signature Section</label>
-                <label><input type="checkbox" value="Appendix"> Appendix</label>
-
-            </div>
-
-        </div>
-
-        <div class="form-section">
-
-            <h2>Photo Requirements</h2>
-
-            <input type="number" id="photosPerReport" placeholder="Average Photos Per Report">
-
-            <select id="captionsRequired">
-                <option>Captions Required</option>
-                <option>Yes</option>
-                <option>No</option>
-            </select>
-
-            <input type="text"
-                   id="photoNumbering"
-                   placeholder="Photo Numbering Format">
-
-            <select id="beforeAfter">
-                <option>Before/After Photos Required</option>
-                <option>Yes</option>
-                <option>No</option>
-            </select>
-
-        </div>
-
-        <div class="form-section">
-
-            <h2>Export Requirements</h2>
-
-            <select id="exportFormat">
-                <option>PDF</option>
-                <option>Word</option>
-                <option>Both</option>
-            </select>
-
-        </div>
-
-        <div class="form-section">
-
-            <h2>Additional Notes</h2>
-
-            <textarea
-                id="notes"
-                rows="6"
-                placeholder="Additional Requirements">
-            </textarea>
-
-        </div>
-
-        <div class="button-group">
-
-            <button type="button" id="saveBtn">
-                Save Form
-            </button>
-
-            <button type="button" id="printBtn">
-                Print Summary
-            </button>
-
-            <button type="button" id="clearBtn">
-                Clear Form
-            </button>
-
-        </div>
-
-    </form>
+        <button class="btn-primary" id="saveBtn">Save Template</button>
+        <button class="btn-success" id="pdfBtn">Download PDF</button>
+        <button class="btn-success" id="docxBtn">Download DOCX</button>
+    </div>
 
 </div>
 
 <script src="js/template-form.js"></script>
-
 </body>
 </html>
