@@ -1,224 +1,149 @@
-const form = document.getElementById("templateForm");
+document.addEventListener("DOMContentLoaded", () => {
+    init();
+});
 
-window.onload = loadForm;
+function init() {
+    document.getElementById("hasTemplate").addEventListener("change", toggleMode);
+    document.getElementById("templateList").addEventListener("change", previewTemplate);
+    document.getElementById("generateBtn").addEventListener("click", generateTemplate);
 
-function saveForm(){
+    document.getElementById("saveBtn").addEventListener("click", saveTemplate);
+    document.getElementById("pdfBtn").addEventListener("click", downloadPDF);
+    document.getElementById("docxBtn").addEventListener("click", downloadDOCX);
 
-    const structure = [];
+    document.getElementById("useTemplateBtn").addEventListener("click", useTemplate);
 
-    document
-        .querySelectorAll(
-            '.checkbox-grid input[type="checkbox"]:checked'
-        )
-        .forEach(item => {
-            structure.push(item.value);
-        });
-
-    const data = {
-
-        companyName:
-            document.getElementById("companyName").value,
-
-        contactPerson:
-            document.getElementById("contactPerson").value,
-
-        position:
-            document.getElementById("position").value,
-
-        email:
-            document.getElementById("email").value,
-
-        phone:
-            document.getElementById("phone").value,
-
-        reportName:
-            document.getElementById("reportName").value,
-
-        reportType:
-            document.getElementById("reportType").value,
-
-        existingTemplate:
-            document.getElementById("existingTemplate").value,
-
-        photosPerReport:
-            document.getElementById("photosPerReport").value,
-
-        captionsRequired:
-            document.getElementById("captionsRequired").value,
-
-        photoNumbering:
-            document.getElementById("photoNumbering").value,
-
-        beforeAfter:
-            document.getElementById("beforeAfter").value,
-
-        exportFormat:
-            document.getElementById("exportFormat").value,
-
-        notes:
-            document.getElementById("notes").value,
-
-        structure
-    };
-
-    localStorage.setItem(
-        "templateCollection",
-        JSON.stringify(data)
-    );
-
-    alert("Form saved successfully.");
+    toggleMode();
 }
 
-function loadForm(){
+/* ---------------------------
+   MODE SWITCH
+----------------------------*/
+function toggleMode() {
+    const mode = document.getElementById("hasTemplate").value;
 
-    const saved =
-        JSON.parse(
-            localStorage.getItem("templateCollection")
-        );
+    const upload = document.getElementById("uploadSection");
+    const generate = document.getElementById("generateSection");
+    const library = document.getElementById("libraryCard");
+    const fileInput = document.getElementById("templateFile");
 
-    if(!saved) return;
+    if (mode === "yes") {
+        upload.classList.remove("hidden");
+        generate.classList.add("hidden");
+        library.classList.add("hidden");
 
-    Object.keys(saved).forEach(key => {
+        fileInput.disabled = false;
+    } else {
+        upload.classList.add("hidden");
+        generate.classList.remove("hidden");
+        library.classList.remove("hidden");
 
-        const field =
-            document.getElementById(key);
+        fileInput.disabled = true;
 
-        if(field){
-            field.value = saved[key];
+        loadTemplates();
+    }
+}
+
+/* ---------------------------
+   TEMPLATE LIBRARY
+----------------------------*/
+function loadTemplates() {
+    const list = document.getElementById("templateList");
+
+    const templates = [
+        {
+            name: "Full Inspection Report",
+            content: "Header → Client → Inspection → Photos → Findings → Recommendations → Sign-off"
+        },
+        {
+            name: "Quick Field Report",
+            content: "Header → Inspection → Findings"
+        },
+        {
+            name: "Photo Evidence Report",
+            content: "Header → Photos → Findings"
         }
+    ];
 
+    list.innerHTML = "";
+
+    templates.forEach((t, index) => {
+        const opt = document.createElement("option");
+        opt.value = index;
+        opt.textContent = t.name;
+        list.appendChild(opt);
     });
 
-    if(saved.structure){
+    previewTemplate();
+}
 
-        document
-            .querySelectorAll(
-                '.checkbox-grid input[type="checkbox"]'
-            )
-            .forEach(box => {
+/* ---------------------------
+   PREVIEW
+----------------------------*/
+function previewTemplate() {
+    const list = document.getElementById("templateList");
+    const preview = document.getElementById("templatePreview");
 
-                if(
-                    saved.structure.includes(
-                        box.value
-                    )
-                ){
-                    box.checked = true;
-                }
+    const templates = [
+        "Full Inspection Report: Header → Client → Inspection → Photos → Findings → Recommendations → Sign-off",
+        "Quick Field Report: Header → Inspection → Findings",
+        "Photo Evidence Report: Header → Photos → Findings"
+    ];
 
-            });
+    const selected = list.value;
 
+    preview.innerText = selected !== "" ? templates[selected] : "Select a template to preview...";
+}
+
+/* ---------------------------
+   GENERATE
+----------------------------*/
+function generateTemplate() {
+    const name = document.getElementById("templateName").value;
+
+    const structure = Array.from(document.querySelectorAll(".structure:checked"))
+        .map(el => el.value);
+
+    alert(`Generated:\n${name}\nSections:\n${structure.join(", ")}`);
+}
+
+/* ---------------------------
+   USE TEMPLATE
+----------------------------*/
+function useTemplate() {
+    alert("Template selected successfully!");
+}
+
+/* ---------------------------
+   UPLOAD VALIDATION
+----------------------------*/
+document.addEventListener("change", function (e) {
+    if (e.target.id === "templateFile") {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const allowed = ["application/pdf",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        ];
+
+        if (!allowed.includes(file.type)) {
+            alert("Only PDF or DOCX files are allowed!");
+            e.target.value = "";
+        }
     }
+});
 
+/* ---------------------------
+   ACTIONS
+----------------------------*/
+function saveTemplate() {
+    alert("Template saved!");
 }
 
-function clearForm(){
-
-    if(
-        !confirm(
-            "Clear all saved data?"
-        )
-    ) return;
-
-    localStorage.removeItem(
-        "templateCollection"
-    );
-
-    location.reload();
+function downloadPDF() {
+    alert("Downloading PDF...");
 }
 
-function printSummary(){
-
-    saveForm();
-
-    const data =
-        JSON.parse(
-            localStorage.getItem(
-                "templateCollection"
-            )
-        );
-
-    const html = `
-    <html>
-    <head>
-        <title>Template Summary</title>
-
-        <style>
-            body{
-                font-family:Arial;
-                padding:40px;
-            }
-
-            h1{
-                color:#1f4ea3;
-            }
-
-            p{
-                margin:8px 0;
-            }
-        </style>
-    </head>
-    <body>
-
-        <h1>Template Collection Summary</h1>
-
-        <p><strong>Company:</strong> ${data.companyName}</p>
-        <p><strong>Contact:</strong> ${data.contactPerson}</p>
-        <p><strong>Position:</strong> ${data.position}</p>
-        <p><strong>Email:</strong> ${data.email}</p>
-        <p><strong>Phone:</strong> ${data.phone}</p>
-
-        <hr>
-
-        <p><strong>Report Name:</strong> ${data.reportName}</p>
-        <p><strong>Report Type:</strong> ${data.reportType}</p>
-        <p><strong>Existing Template:</strong> ${data.existingTemplate}</p>
-
-        <hr>
-
-        <p><strong>Structure:</strong></p>
-        <ul>
-            ${data.structure.map(item =>
-                `<li>${item}</li>`
-            ).join("")}
-        </ul>
-
-        <hr>
-
-        <p><strong>Photos Per Report:</strong> ${data.photosPerReport}</p>
-        <p><strong>Captions Required:</strong> ${data.captionsRequired}</p>
-        <p><strong>Photo Numbering:</strong> ${data.photoNumbering}</p>
-        <p><strong>Before/After:</strong> ${data.beforeAfter}</p>
-
-        <hr>
-
-        <p><strong>Export Format:</strong> ${data.exportFormat}</p>
-
-        <hr>
-
-        <p><strong>Notes:</strong></p>
-        <p>${data.notes}</p>
-
-    </body>
-    </html>
-    `;
-
-    const win = window.open("");
-
-    win.document.write(html);
-
-    win.document.close();
-
-    win.print();
+function downloadDOCX() {
+    alert("Downloading DOCX...");
 }
-
-document
-    .getElementById("saveBtn")
-    .addEventListener("click", saveForm);
-
-document
-    .getElementById("printBtn")
-    .addEventListener("click", printSummary);
-
-document
-    .getElementById("clearBtn")
-    .addEventListener("click", clearForm);
