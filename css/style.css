@@ -111,3 +111,43 @@ h1{
 .panel.show{
     display:block;
 }
+
+.category ul{
+    margin:15px 0 15px 25px;
+}
+
+.category li{
+    margin-bottom:8px;
+}
+
+.panel p{
+    margin-bottom:12px;
+    line-height:1.7;
+}
+
+.panel strong{
+    color:#1f4ea3;
+}
+
+.card h2{
+    margin-bottom:10px;
+    color:#1f4ea3;
+}
+
+.card p{
+    line-height:1.6;
+}
+
+@media(max-width:768px){
+
+    .cards{
+        flex-direction:column;
+        align-items:center;
+    }
+
+    .card{
+        width:100%;
+        max-width:400px;
+    }
+
+}
