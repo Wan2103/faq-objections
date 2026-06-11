@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Template Builder - EviNDT</title>
+    <title>Template Collection - EviNDT</title>
 
     <link rel="stylesheet" href="css/style.css"/>
 </head>
@@ -12,73 +12,22 @@
 
 <div class="container">
 
-    <h1>📄 Template Builder</h1>
+    <h1>📄 Template Collection Form</h1>
 
-    <!-- TEMPLATE MODE -->
+    <!-- =========================
+         1. USER INFO
+    ========================== -->
     <div class="form-section">
-        <h2>Template Mode</h2>
-
-        <label>Do you already have a template?</label>
-        <select id="hasTemplate">
-            <option value="yes">Yes (Upload my template)</option>
-            <option value="no">No (Use system templates)</option>
-        </select>
-
-        <div id="uploadSection">
-            <label>Upload Template (PDF / DOCX only)</label>
-            <input type="file" id="templateFile" accept=".pdf,.docx"/>
-        </div>
-
-        <div id="generateSection" class="hidden">
-            <label>Generate Template Name</label>
-            <input type="text" id="templateName" placeholder="e.g. UT Report Template"/>
-            <button class="btn-secondary" id="generateBtn">Generate Template</button>
-        </div>
-    </div>
-
-    <!-- REPORT STRUCTURE -->
-    <div class="form-section">
-        <h2>Report Structure Filter</h2>
-
-        <div class="checkbox-grid">
-            <label><input type="checkbox" class="structure" value="header"> Header</label>
-            <label><input type="checkbox" class="structure" value="client"> Client Info</label>
-            <label><input type="checkbox" class="structure" value="inspection"> Inspection</label>
-            <label><input type="checkbox" class="structure" value="photos"> Photos</label>
-            <label><input type="checkbox" class="structure" value="findings"> Findings</label>
-            <label><input type="checkbox" class="structure" value="recommendations"> Recommendations</label>
-            <label><input type="checkbox" class="structure" value="signoff"> Sign-off</label>
-        </div>
-    </div>
-
-    <!-- TEMPLATE LIBRARY -->
-    <div class="form-section hidden" id="libraryCard">
-        <h2>Template Library</h2>
-
-        <label>Select Template</label>
-        <select id="templateList"></select>
-
-        <div class="preview-box" id="templatePreview">
-            Select a template to preview...
-        </div>
-
-        <div class="button-group">
-            <button id="useTemplateBtn" class="btn-primary">Use Template</button>
-        </div>
-    </div>
-
-    <!-- 📊 SALES / INSPECTION CRM FORM -->
-    <div class="form-section">
-        <h2>📊 Inspection / Sales Record</h2>
+        <h2>1. User Information</h2>
 
         <label>Prospect / Company</label>
-        <input type="text" placeholder="Enter company name or prospect">
+        <input type="text" id="company" placeholder="Enter company name">
 
         <label>User Role</label>
-        <input type="text" placeholder="e.g. QA Engineer, Inspector, Manager">
+        <input type="text" id="role" placeholder="e.g. QA Engineer, Inspector">
 
         <label>Report Type</label>
-        <select>
+        <select id="reportType">
             <option>UT Report</option>
             <option>RT Report</option>
             <option>MT Report</option>
@@ -87,43 +36,61 @@
         </select>
 
         <label>Current Reporting Tool</label>
-        <input type="text" placeholder="e.g. Excel, Word, Manual paper">
+        <input type="text" id="tool" placeholder="e.g. Excel, Word, Manual">
 
         <label>Main Pain</label>
-        <textarea placeholder="What is the main issue they face?"></textarea>
-
-        <label>Template Available?</label>
-        <select>
-            <option>Yes</option>
-            <option>No</option>
-        </select>
-
-        <label>Demo Result</label>
-        <textarea placeholder="What happened during demo?"></textarea>
-
-        <label>Objections</label>
-        <textarea placeholder="List objections raised"></textarea>
-
-        <label>Next Action</label>
-        <input type="text" placeholder="e.g. Follow-up demo, send quote">
-
-        <label>Follow-up Date</label>
-        <input type="date">
+        <textarea id="pain" placeholder="What is the main issue?"></textarea>
     </div>
 
-    <!-- ACTIONS -->
+    <!-- =========================
+         2. TEMPLATE COLLECTION
+    ========================== -->
     <div class="form-section">
-        <h2>Actions</h2>
+        <h2>2. Template Collection</h2>
+
+        <label>Do you have a template?</label>
+        <select id="hasTemplate">
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+        </select>
+
+        <!-- NO TEMPLATE -->
+        <div id="noTemplateSection">
+            <p>No template selected. You can proceed to export your info.</p>
+        </div>
+
+        <!-- YES TEMPLATE (UPLOAD) -->
+        <div id="yesTemplateSection" class="hidden">
+
+            <label>Upload Template (PDF / DOCX only)</label>
+
+            <div class="upload-box" id="dropArea">
+                <p>📁 Drag & Drop your file here</p>
+                <p>or click to upload</p>
+                <input type="file" id="templateFile" accept=".pdf,.docx" hidden>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- =========================
+         3. EXPORT
+    ========================== -->
+    <div class="form-section">
+        <h2>3. Export</h2>
+
+        <p>Download all collected information as a PDF file.</p>
 
         <div class="button-group">
-            <button class="btn-primary" id="saveBtn">Save Template</button>
-            <button class="btn-success" id="pdfBtn">Download PDF</button>
-            <button class="btn-success" id="docxBtn">Download DOCX</button>
+            <button class="btn-primary" id="exportPdfBtn">
+                ⬇ Download PDF
+            </button>
         </div>
     </div>
 
 </div>
 
 <script src="js/template-form.js"></script>
+
 </body>
 </html>
