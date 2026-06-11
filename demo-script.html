@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EviNDT Demo Script</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="nav">
+        <a href="index.html">Home</a>
+        <a href="faq.html">FAQs</a>
+        <a href="objections.html">Objections</a>
+        <a href="demo-script.html" class="active">Demo Script</a>
+    </div>
+
+    <h1>EviNDT Demo Script</h1>
+
+    <input
+        type="text"
+        id="searchInput"
+        placeholder="Search demo script..."
+        class="search-box"
+    >
+
+    <div id="content"></div>
+
+</div>
+
+<script src="js/demo-data.js"></script>
+<script src="js/script.js"></script>
+
+<script>
+renderContent(demoData);
+</script>
+
+</body>
+</html>
