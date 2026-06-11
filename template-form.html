@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>EviNDT - Template Builder</title>
+    <title>Template Builder - EviNDT</title>
+
     <link rel="stylesheet" href="css/style.css"/>
 </head>
 
@@ -11,16 +12,35 @@
 
 <div class="container">
 
-    <div class="card">
-        <h2>📄 Template Builder</h2>
-        <p>Upload, generate, or select inspection report templates.</p>
+    <h1>📄 Template Builder</h1>
+
+    <!-- MODE SECTION -->
+    <div class="form-section">
+        <h2>Template Mode</h2>
+
+        <label>Do you already have a template?</label>
+        <select id="hasTemplate">
+            <option value="yes">Yes (Upload my template)</option>
+            <option value="no">No (Use system templates)</option>
+        </select>
+
+        <div id="uploadSection">
+            <label>Upload Template (PDF / DOCX only)</label>
+            <input type="file" id="templateFile" accept=".pdf,.docx"/>
+        </div>
+
+        <div id="generateSection" class="hidden">
+            <label>Generate Template Name</label>
+            <input type="text" id="templateName" placeholder="e.g. UT Report Template"/>
+            <button class="btn-secondary" id="generateBtn">Generate Template</button>
+        </div>
     </div>
 
-    <!-- REPORT STRUCTURE -->
-    <div class="card">
-        <h2>📌 Report Structure</h2>
+    <!-- STRUCTURE SECTION -->
+    <div class="form-section">
+        <h2>Report Structure Filter</h2>
 
-        <div class="checkbox-group">
+        <div class="checkbox-grid">
             <label><input type="checkbox" class="structure" value="header"> Header</label>
             <label><input type="checkbox" class="structure" value="client"> Client Info</label>
             <label><input type="checkbox" class="structure" value="inspection"> Inspection</label>
@@ -31,52 +51,31 @@
         </div>
     </div>
 
-    <!-- MODE -->
-    <div class="card">
-        <h2>📁 Template Mode</h2>
-
-        <label>Do you already have a template?</label>
-        <select id="hasTemplate">
-            <option value="yes">Yes - Upload my template</option>
-            <option value="no">No - Use system templates</option>
-        </select>
-
-        <!-- UPLOAD SECTION -->
-        <div id="uploadSection">
-            <label>Upload Template (PDF / DOCX only)</label>
-            <input type="file" id="templateFile" accept=".pdf,.docx"/>
-        </div>
-
-        <!-- GENERATE SECTION -->
-        <div id="generateSection" class="hidden">
-            <label>Generate Template Name</label>
-            <input type="text" id="templateName" placeholder="e.g. UT Report Template"/>
-            <button class="btn-secondary" id="generateBtn">Generate Template</button>
-        </div>
-    </div>
-
     <!-- TEMPLATE LIBRARY -->
-    <div class="card hidden" id="libraryCard">
-        <h2>📚 Template Library</h2>
+    <div class="form-section hidden" id="libraryCard">
+        <h2>Template Library</h2>
 
-        <p>Select a template to preview:</p>
-
+        <label>Select Template</label>
         <select id="templateList"></select>
 
         <div class="preview-box" id="templatePreview">
-            Preview will appear here...
+            Select a template to preview...
         </div>
 
-        <button class="btn-primary" id="useTemplateBtn">Use This Template</button>
+        <div class="button-group">
+            <button id="useTemplateBtn">Use Template</button>
+        </div>
     </div>
 
     <!-- ACTIONS -->
-    <div class="card">
-        <h2>⚡ Actions</h2>
+    <div class="form-section">
+        <h2>Actions</h2>
 
-        <button class="btn-primary" id="saveBtn">Save Template</button>
-        <button class="btn-success" id="pdfBtn">Download PDF</button>
-        <button class="btn-success" id="docxBtn">Download DOCX</button>
+        <div class="button-group">
+            <button class="btn-primary" id="saveBtn">Save Template</button>
+            <button class="btn-success" id="pdfBtn">Download PDF</button>
+            <button class="btn-success" id="docxBtn">Download DOCX</button>
+        </div>
     </div>
 
 </div>
