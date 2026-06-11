@@ -3,147 +3,155 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function init() {
-    document.getElementById("hasTemplate").addEventListener("change", toggleMode);
-    document.getElementById("templateList").addEventListener("change", previewTemplate);
-    document.getElementById("generateBtn").addEventListener("click", generateTemplate);
-
-    document.getElementById("saveBtn").addEventListener("click", saveTemplate);
-    document.getElementById("pdfBtn").addEventListener("click", downloadPDF);
-    document.getElementById("docxBtn").addEventListener("click", downloadDOCX);
-
-    document.getElementById("useTemplateBtn").addEventListener("click", useTemplate);
-
-    toggleMode();
-}
-
-/* ---------------------------
-   MODE SWITCH
-----------------------------*/
-function toggleMode() {
-    const mode = document.getElementById("hasTemplate").value;
-
-    const upload = document.getElementById("uploadSection");
-    const generate = document.getElementById("generateSection");
-    const library = document.getElementById("libraryCard");
+    const hasTemplate = document.getElementById("hasTemplate");
     const fileInput = document.getElementById("templateFile");
+    const dropArea = document.getElementById("dropArea");
 
-    if (mode === "yes") {
-        upload.classList.remove("hidden");
-        generate.classList.add("hidden");
-        library.classList.add("hidden");
+    hasTemplate.addEventListener("change", toggleTemplateMode);
 
-        fileInput.disabled = false;
-    } else {
-        upload.classList.add("hidden");
-        generate.classList.remove("hidden");
-        library.classList.remove("hidden");
+    document.getElementById("exportPdfBtn")
+        .addEventListener("click", exportPDF);
 
-        fileInput.disabled = true;
+    // Drag & drop support
+    if (dropArea) {
+        dropArea.addEventListener("click", () => fileInput.click());
 
-        loadTemplates();
+        dropArea.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            dropArea.style.border = "2px dashed #1f4ea3";
+        });
+
+        dropArea.addEventListener("dragleave", () => {
+            dropArea.style.border = "none";
+        });
+
+        dropArea.addEventListener("drop", (e) => {
+            e.preventDefault();
+            const file = e.dataTransfer.files[0];
+            handleFile(file);
+        });
     }
-}
 
-/* ---------------------------
-   TEMPLATE LIBRARY
-----------------------------*/
-function loadTemplates() {
-    const list = document.getElementById("templateList");
-
-    const templates = [
-        {
-            name: "Full Inspection Report",
-            content: "Header → Client → Inspection → Photos → Findings → Recommendations → Sign-off"
-        },
-        {
-            name: "Quick Field Report",
-            content: "Header → Inspection → Findings"
-        },
-        {
-            name: "Photo Evidence Report",
-            content: "Header → Photos → Findings"
-        }
-    ];
-
-    list.innerHTML = "";
-
-    templates.forEach((t, index) => {
-        const opt = document.createElement("option");
-        opt.value = index;
-        opt.textContent = t.name;
-        list.appendChild(opt);
+    fileInput.addEventListener("change", (e) => {
+        handleFile(e.target.files[0]);
     });
 
-    previewTemplate();
+    toggleTemplateMode();
 }
 
-/* ---------------------------
-   PREVIEW
-----------------------------*/
-function previewTemplate() {
-    const list = document.getElementById("templateList");
-    const preview = document.getElementById("templatePreview");
+/* -----------------------------
+   TEMPLATE MODE (YES / NO)
+------------------------------*/
+function toggleTemplateMode() {
+    const mode = document.getElementById("hasTemplate").value;
 
-    const templates = [
-        "Full Inspection Report: Header → Client → Inspection → Photos → Findings → Recommendations → Sign-off",
-        "Quick Field Report: Header → Inspection → Findings",
-        "Photo Evidence Report: Header → Photos → Findings"
+    const yesSection = document.getElementById("yesTemplateSection");
+    const noSection = document.getElementById("noTemplateSection");
+
+    if (mode === "yes") {
+        yesSection.classList.remove("hidden");
+        noSection.classList.add("hidden");
+    } else {
+        yesSection.classList.add("hidden");
+        noSection.classList.remove("hidden");
+    }
+}
+
+/* -----------------------------
+   FILE VALIDATION
+------------------------------*/
+function handleFile(file) {
+    if (!file) return;
+
+    const allowedTypes = [
+        "application/pdf",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     ];
 
-    const selected = list.value;
-
-    preview.innerText = selected !== "" ? templates[selected] : "Select a template to preview...";
-}
-
-/* ---------------------------
-   GENERATE
-----------------------------*/
-function generateTemplate() {
-    const name = document.getElementById("templateName").value;
-
-    const structure = Array.from(document.querySelectorAll(".structure:checked"))
-        .map(el => el.value);
-
-    alert(`Generated:\n${name}\nSections:\n${structure.join(", ")}`);
-}
-
-/* ---------------------------
-   USE TEMPLATE
-----------------------------*/
-function useTemplate() {
-    alert("Template selected successfully!");
-}
-
-/* ---------------------------
-   UPLOAD VALIDATION
-----------------------------*/
-document.addEventListener("change", function (e) {
-    if (e.target.id === "templateFile") {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        const allowed = ["application/pdf",
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        ];
-
-        if (!allowed.includes(file.type)) {
-            alert("Only PDF or DOCX files are allowed!");
-            e.target.value = "";
-        }
+    if (!allowedTypes.includes(file.type)) {
+        alert("Only PDF or DOCX files are allowed!");
+        return;
     }
-});
 
-/* ---------------------------
-   ACTIONS
-----------------------------*/
-function saveTemplate() {
-    alert("Template saved!");
+    alert(`File uploaded: ${file.name}`);
 }
 
-function downloadPDF() {
-    alert("Downloading PDF...");
+/* -----------------------------
+   COLLECT FORM DATA
+------------------------------*/
+function collectData() {
+    return {
+        company: document.getElementById("company")?.value || "",
+        role: document.getElementById("role")?.value || "",
+        reportType: document.getElementById("reportType")?.value || "",
+        tool: document.getElementById("tool")?.value || "",
+        pain: document.getElementById("pain")?.value || "",
+        hasTemplate: document.getElementById("hasTemplate")?.value || ""
+    };
 }
 
-function downloadDOCX() {
-    alert("Downloading DOCX...");
+/* -----------------------------
+   EXPORT PDF (REAL STRUCTURE)
+------------------------------*/
+function exportPDF() {
+    const data = collectData();
+
+    const content = `
+EviNDT - Template Collection Report
+
+====================================
+
+USER INFORMATION
+----------------
+Company: ${data.company}
+Role: ${data.role}
+Report Type: ${data.reportType}
+Current Tool: ${data.tool}
+Main Pain: ${data.pain}
+
+====================================
+
+TEMPLATE STATUS
+---------------
+Has Template: ${data.hasTemplate}
+
+====================================
+Generated by EviNDT System
+    `;
+
+    generatePDF(content);
+}
+
+/* -----------------------------
+   PDF GENERATOR
+   (uses browser print → PDF)
+------------------------------*/
+function generatePDF(textContent) {
+    const win = window.open("", "_blank");
+
+    win.document.write(`
+        <html>
+        <head>
+            <title>EviNDT Report</title>
+            <style>
+                body {
+                    font-family: Arial;
+                    padding: 30px;
+                    line-height: 1.6;
+                    white-space: pre-line;
+                }
+                h1 {
+                    color: #1f4ea3;
+                }
+            </style>
+        </head>
+        <body>
+            <h1>EviNDT Template Report</h1>
+            <div>${textContent}</div>
+        </body>
+        </html>
+    `);
+
+    win.document.close();
+    win.print();
 }
