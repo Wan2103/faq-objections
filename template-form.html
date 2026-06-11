@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Collection Form</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="nav">
+        <a href="index.html">Home</a>
+        <a href="faq.html">FAQs</a>
+        <a href="objections.html">Objections</a>
+        <a href="demo-script.html">Demo Script</a>
+        <a href="template-form.html" class="active">Template Form</a>
+    </div>
+
+    <h1>Template Collection Form</h1>
+
+    <form id="templateForm">
+
+        <div class="form-section">
+
+            <h2>Company Information</h2>
+
+            <input type="text" id="companyName" placeholder="Company Name">
+
+            <input type="text" id="contactPerson" placeholder="Contact Person">
+
+            <input type="text" id="position" placeholder="Position">
+
+            <input type="email" id="email" placeholder="Email">
+
+            <input type="text" id="phone" placeholder="Phone Number">
+
+        </div>
+
+        <div class="form-section">
+
+            <h2>Report Information</h2>
+
+            <input type="text" id="reportName" placeholder="Report Name">
+
+            <select id="reportType">
+                <option>NDT</option>
+                <option>Drone Inspection</option>
+                <option>Infrastructure</option>
+                <option>Asset Integrity</option>
+                <option>Factory Maintenance</option>
+                <option>Other</option>
+            </select>
+
+            <label>
+                Existing Template Available?
+            </label>
+
+            <select id="existingTemplate">
+                <option>Yes</option>
+                <option>No</option>
+            </select>
+
+            <input type="file" id="templateFile">
+
+        </div>
+
+        <div class="form-section">
+
+            <h2>Report Structure</h2>
+
+            <div class="checkbox-grid">
+
+                <label><input type="checkbox" value="Cover Page"> Cover Page</label>
+                <label><input type="checkbox" value="Table of Contents"> Table of Contents</label>
+                <label><input type="checkbox" value="Executive Summary"> Executive Summary</label>
+                <label><input type="checkbox" value="Inspection Details"> Inspection Details</label>
+                <label><input type="checkbox" value="Findings Section"> Findings Section</label>
+                <label><input type="checkbox" value="Photo Section"> Photo Section</label>
+                <label><input type="checkbox" value="Recommendations"> Recommendations</label>
+                <label><input type="checkbox" value="Conclusion"> Conclusion</label>
+                <label><input type="checkbox" value="Signature Section"> Signature Section</label>
+                <label><input type="checkbox" value="Appendix"> Appendix</label>
+
+            </div>
+
+        </div>
+
+        <div class="form-section">
+
+            <h2>Photo Requirements</h2>
+
+            <input type="number" id="photosPerReport" placeholder="Average Photos Per Report">
+
+            <select id="captionsRequired">
+                <option>Captions Required</option>
+                <option>Yes</option>
+                <option>No</option>
+            </select>
+
+            <input type="text"
+                   id="photoNumbering"
+                   placeholder="Photo Numbering Format">
+
+            <select id="beforeAfter">
+                <option>Before/After Photos Required</option>
+                <option>Yes</option>
+                <option>No</option>
+            </select>
+
+        </div>
+
+        <div class="form-section">
+
+            <h2>Export Requirements</h2>
+
+            <select id="exportFormat">
+                <option>PDF</option>
+                <option>Word</option>
+                <option>Both</option>
+            </select>
+
+        </div>
+
+        <div class="form-section">
+
+            <h2>Additional Notes</h2>
+
+            <textarea
+                id="notes"
+                rows="6"
+                placeholder="Additional Requirements">
+            </textarea>
+
+        </div>
+
+        <div class="button-group">
+
+            <button type="button" id="saveBtn">
+                Save Form
+            </button>
+
+            <button type="button" id="printBtn">
+                Print Summary
+            </button>
+
+            <button type="button" id="clearBtn">
+                Clear Form
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+<script src="js/template-form.js"></script>
+
+</body>
+</html>
