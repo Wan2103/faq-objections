@@ -1,157 +1,128 @@
-document.addEventListener("DOMContentLoaded", () => {
-    init();
-});
+const SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbz5BdMsR7RikPPnbcSNMyO7U1da0qx4VOcvZc_h9j_g9zQ1cDQYyi3eXVCenaJX7NESHA/exec";
 
-function init() {
-    const hasTemplate = document.getElementById("hasTemplate");
-    const fileInput = document.getElementById("templateFile");
-    const dropArea = document.getElementById("dropArea");
+/* -----------------------------
+   FILE → BASE64 CONVERTER
+------------------------------*/
+function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
 
-    hasTemplate.addEventListener("change", toggleTemplateMode);
+        reader.onload = () => {
+            const base64 = reader.result.split(",")[1];
+            resolve(base64);
+        };
 
-    document.getElementById("exportPdfBtn")
-        .addEventListener("click", exportPDF);
+        reader.onerror = reject;
 
-    // Drag & drop support
-    if (dropArea) {
-        dropArea.addEventListener("click", () => fileInput.click());
-
-        dropArea.addEventListener("dragover", (e) => {
-            e.preventDefault();
-            dropArea.style.border = "2px dashed #1f4ea3";
-        });
-
-        dropArea.addEventListener("dragleave", () => {
-            dropArea.style.border = "none";
-        });
-
-        dropArea.addEventListener("drop", (e) => {
-            e.preventDefault();
-            const file = e.dataTransfer.files[0];
-            handleFile(file);
-        });
-    }
-
-    fileInput.addEventListener("change", (e) => {
-        handleFile(e.target.files[0]);
+        reader.readAsDataURL(file);
     });
-
-    toggleTemplateMode();
 }
 
 /* -----------------------------
-   TEMPLATE MODE (YES / NO)
+   MAIN SUBMIT FUNCTION
 ------------------------------*/
-function toggleTemplateMode() {
-    const mode = document.getElementById("hasTemplate").value;
+async function submitTemplateForm() {
 
-    const yesSection = document.getElementById("yesTemplateSection");
-    const noSection = document.getElementById("noTemplateSection");
+    const company = document.getElementById("company").value;
+    const userRole = document.getElementById("userRole").value;
+    const reportType = document.getElementById("reportType").value;
+    const currentTool = document.getElementById("currentTool").value;
+    const mainPain = document.getElementById("mainPain").value;
+    const hasTemplate = document.getElementById("hasTemplate").value;
 
-    if (mode === "yes") {
-        yesSection.classList.remove("hidden");
-        noSection.classList.add("hidden");
-    } else {
-        yesSection.classList.add("hidden");
-        noSection.classList.remove("hidden");
-    }
-}
+    const fileInput = document.getElementById("templateFile");
+    const file = fileInput.files[0];
 
-/* -----------------------------
-   FILE VALIDATION
-------------------------------*/
-function handleFile(file) {
-    if (!file) return;
+    let fileBase64 = null;
+    let fileName = "";
+    let fileType = "";
 
-    const allowedTypes = [
-        "application/pdf",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    ];
-
-    if (!allowedTypes.includes(file.type)) {
-        alert("Only PDF or DOCX files are allowed!");
+    /* -------------------------
+       VALIDATION
+    --------------------------*/
+    if (!company) {
+        alert("Please enter company name");
         return;
     }
 
-    alert(`File uploaded: ${file.name}`);
-}
+    if (hasTemplate === "") {
+        alert("Please select Yes or No for template");
+        return;
+    }
 
-/* -----------------------------
-   COLLECT FORM DATA
-------------------------------*/
-function collectData() {
-    return {
-        company: document.getElementById("company")?.value || "",
-        role: document.getElementById("role")?.value || "",
-        reportType: document.getElementById("reportType")?.value || "",
-        tool: document.getElementById("tool")?.value || "",
-        pain: document.getElementById("pain")?.value || "",
-        hasTemplate: document.getElementById("hasTemplate")?.value || ""
+    /* -------------------------
+       FILE HANDLING
+    --------------------------*/
+    if (file) {
+
+        const allowed = [
+            "application/pdf",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        ];
+
+        if (!allowed.includes(file.type)) {
+            alert("Only PDF or DOCX files allowed!");
+            return;
+        }
+
+        fileBase64 = await fileToBase64(file);
+        fileName = file.name;
+        fileType = file.type;
+    }
+
+    /* -------------------------
+       PAYLOAD
+    --------------------------*/
+    const payload = {
+        company,
+        userRole,
+        reportType,
+        currentTool,
+        mainPain,
+        hasTemplate,
+
+        file: fileBase64,
+        fileName,
+        fileType
     };
+
+    /* -------------------------
+       SEND TO GOOGLE APPS SCRIPT
+    --------------------------*/
+    try {
+
+        const res = await fetch(SCRIPT_URL, {
+            method: "POST",
+            body: JSON.stringify(payload)
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+            alert("✅ Template saved successfully!");
+            clearForm();
+        } else {
+            alert("❌ Error saving data");
+            console.error(result.error);
+        }
+
+    } catch (err) {
+        console.error(err);
+        alert("Network error. Check console.");
+    }
 }
 
 /* -----------------------------
-   EXPORT PDF (REAL STRUCTURE)
+   RESET FORM
 ------------------------------*/
-function exportPDF() {
-    const data = collectData();
+function clearForm() {
 
-    const content = `
-EviNDT - Template Collection Report
-
-====================================
-
-USER INFORMATION
-----------------
-Company: ${data.company}
-Role: ${data.role}
-Report Type: ${data.reportType}
-Current Tool: ${data.tool}
-Main Pain: ${data.pain}
-
-====================================
-
-TEMPLATE STATUS
----------------
-Has Template: ${data.hasTemplate}
-
-====================================
-Generated by EviNDT System
-    `;
-
-    generatePDF(content);
-}
-
-/* -----------------------------
-   PDF GENERATOR
-   (uses browser print → PDF)
-------------------------------*/
-function generatePDF(textContent) {
-    const win = window.open("", "_blank");
-
-    win.document.write(`
-        <html>
-        <head>
-            <title>EviNDT Report</title>
-            <style>
-                body {
-                    font-family: Arial;
-                    padding: 30px;
-                    line-height: 1.6;
-                    white-space: pre-line;
-                }
-                h1 {
-                    color: #1f4ea3;
-                }
-            </style>
-        </head>
-        <body>
-            <h1>EviNDT Template Report</h1>
-            <div>${textContent}</div>
-        </body>
-        </html>
-    `);
-
-    win.document.close();
-    win.print();
+    document.getElementById("company").value = "";
+    document.getElementById("userRole").value = "";
+    document.getElementById("reportType").value = "";
+    document.getElementById("currentTool").value = "";
+    document.getElementById("mainPain").value = "";
+    document.getElementById("hasTemplate").value = "";
+    document.getElementById("templateFile").value = "";
 }
