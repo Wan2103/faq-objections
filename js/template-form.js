@@ -1,11 +1,13 @@
-const SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbz5BdMsR7RikPPnbcSNMyO7U1da0qx4VOcvZc_h9j_g9zQ1cDQYyi3eXVCenaJX7NESHA/exec";
 
-/* -----------------------------
-   FILE → BASE64 CONVERTER
-------------------------------*/
+const SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbyUDl4rBbGaXtJvMPwUQePQfDjJxX-ynczuPTcF2gQ7KJhFIjFpg0mq8r_Y9Bz5_wwuzQ/exec";
+
+/* =========================
+   CONVERT FILE TO BASE64
+========================= */
 function fileToBase64(file) {
     return new Promise((resolve, reject) => {
+
         const reader = new FileReader();
 
         reader.onload = () => {
@@ -19,11 +21,14 @@ function fileToBase64(file) {
     });
 }
 
-/* -----------------------------
+/* =========================
    MAIN SUBMIT FUNCTION
-------------------------------*/
+========================= */
 async function submitTemplateForm() {
 
+    // -------------------------
+    // GET FORM VALUES
+    // -------------------------
     const company = document.getElementById("company").value;
     const userRole = document.getElementById("userRole").value;
     const reportType = document.getElementById("reportType").value;
@@ -34,35 +39,41 @@ async function submitTemplateForm() {
     const fileInput = document.getElementById("templateFile");
     const file = fileInput.files[0];
 
-    let fileBase64 = null;
+    let fileBase64 = "";
     let fileName = "";
     let fileType = "";
 
-    /* -------------------------
-       VALIDATION
-    --------------------------*/
+    // -------------------------
+    // VALIDATION
+    // -------------------------
     if (!company) {
-        alert("Please enter company name");
+        alert("Company is required");
         return;
     }
 
-    if (hasTemplate === "") {
+    if (!hasTemplate) {
         alert("Please select Yes or No for template");
         return;
     }
 
-    /* -------------------------
-       FILE HANDLING
-    --------------------------*/
+    // -------------------------
+    // FILE HANDLING
+    // -------------------------
     if (file) {
 
-        const allowed = [
+        const allowedTypes = [
             "application/pdf",
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         ];
 
-        if (!allowed.includes(file.type)) {
-            alert("Only PDF or DOCX files allowed!");
+        if (!allowedTypes.includes(file.type)) {
+            alert("Only PDF or DOCX files are allowed!");
+            return;
+        }
+
+        // safety limit (4MB)
+        if (file.size > 4 * 1024 * 1024) {
+            alert("File too large (max 4MB)");
             return;
         }
 
@@ -71,9 +82,9 @@ async function submitTemplateForm() {
         fileType = file.type;
     }
 
-    /* -------------------------
-       PAYLOAD
-    --------------------------*/
+    // -------------------------
+    // PAYLOAD (MUST MATCH APPS SCRIPT)
+    // -------------------------
     const payload = {
         company,
         userRole,
@@ -87,9 +98,9 @@ async function submitTemplateForm() {
         fileType
     };
 
-    /* -------------------------
-       SEND TO GOOGLE APPS SCRIPT
-    --------------------------*/
+    // -------------------------
+    // SEND TO APPS SCRIPT
+    // -------------------------
     try {
 
         const res = await fetch(SCRIPT_URL, {
@@ -99,23 +110,25 @@ async function submitTemplateForm() {
 
         const result = await res.json();
 
+        console.log("Server response:", result);
+
         if (result.success) {
             alert("✅ Template saved successfully!");
             clearForm();
         } else {
-            alert("❌ Error saving data");
+            alert("❌ Save failed. Check console.");
             console.error(result.error);
         }
 
     } catch (err) {
-        console.error(err);
-        alert("Network error. Check console.");
+        console.error("Network error:", err);
+        alert("Network error. Please try again.");
     }
 }
 
-/* -----------------------------
-   RESET FORM
-------------------------------*/
+/* =========================
+   CLEAR FORM
+========================= */
 function clearForm() {
 
     document.getElementById("company").value = "";
