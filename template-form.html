@@ -89,7 +89,57 @@
     </div>
 
 </div>
+<!-- Firebase Setup -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-analytics.js";
 
+  import {
+    getFirestore,
+    doc,
+    setDoc
+  } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+  import {
+    getStorage,
+    ref,
+    uploadBytes,
+    getDownloadURL
+  } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-storage.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyB41VD5Ijny4a5ykmu5GJKAyOWuTxYGbb0",
+    authDomain: "evindt-revision.firebaseapp.com",
+    projectId: "evindt-revision",
+    storageBucket: "evindt-revision.firebasestorage.app",
+    messagingSenderId: "731150046723",
+    appId: "1:731150046723:web:bd4d7b2081c75aedac6036",
+    measurementId: "G-GP22660HNW"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
+  const db = getFirestore(app);
+  const storage = getStorage(app);
+
+  window.firebaseApp = app;
+  window.db = db;
+  window.storage = storage;
+
+  window.firebaseFns = {
+    doc,
+    setDoc,
+    ref,
+    uploadBytes,
+    getDownloadURL
+  };
+
+  console.log("🔥 Firebase ready for EviNDT");
+</script>
+
+<!-- THEN your main JS -->
+<script src="js/template-form.js"></script>
 <script src="js/template-form.js"></script>
 
 </body>
